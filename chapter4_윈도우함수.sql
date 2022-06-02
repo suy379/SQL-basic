@@ -1,20 +1,20 @@
--- 1-4 À©µµ¿ì ÇÔ¼ö
--- À©µµ¿ì ¼øÀ§ ÇÔ¼ö / À©µµ¿ì Áı°è ÇÔ¼ö(´©Àû)
--- À©µµ¿ì ÇÔ¼ö + OVER (ORDER BY ¿­ ASC or DESC)
--- À©µµ¿ì ÇÔ¼ö + OVER (PARTITION BY ¿­ ORDER BY ¿­)
+-- 1-4 ìœˆë„ìš° í•¨ìˆ˜
+-- ìœˆë„ìš° ìˆœìœ„ í•¨ìˆ˜ / ìœˆë„ìš° ì§‘ê³„ í•¨ìˆ˜(ëˆ„ì )
+-- ìœˆë„ìš° í•¨ìˆ˜ + OVER (ORDER BY ì—´ ASC or DESC)
+-- ìœˆë„ìš° í•¨ìˆ˜ + OVER (PARTITION BY ì—´ ORDER BY ì—´)
 
 USE EDU 
 SELECT * FROM [ORDER] 
 
--- ¼øÀ§ÇÔ¼ö 
--- Q. order_date¿¡ ´ëÇØ, ÃÖÃÊÁÖ¹®ÀÏÀÚºÎÅÍ ¼øÀ§¸¦ ºÎ¿©ÇÏ¶ó.(¾î¶² ÇÔ¼ö¸¦ ¾²´ÂÁö¿¡ µû¶ó ¼øÀ§°¡ ´Ş¶óÁü)
+-- ìˆœìœ„í•¨ìˆ˜ 
+-- Q. order_dateì— ëŒ€í•´, ìµœì´ˆì£¼ë¬¸ì¼ìë¶€í„° ìˆœìœ„ë¥¼ ë¶€ì—¬í•˜ë¼.(ì–´ë–¤ í•¨ìˆ˜ë¥¼ ì“°ëŠ”ì§€ì— ë”°ë¼ ìˆœìœ„ê°€ ë‹¬ë¼ì§)
 SELECT order_date,
 	ROW_NUMBER() OVER (ORDER BY order_date ASC) AS rownumber,
 	RANK() OVER (ORDER BY order_date ASC) AS rnk,
 	DENSE_RANK() OVER (ORDER BY order_date ASC) AS densernk
 FROM [ORDER]
 
--- Q. mem_no¿¡ µû¶ó ±¸ºĞÁö¾î order_date¿¡ ¼øÀ§¸¦ ºÎ¿©ÇÏ¶ó.
+-- Q. mem_noì— ë”°ë¼ êµ¬ë¶„ì§€ì–´ order_dateì— ìˆœìœ„ë¥¼ ë¶€ì—¬í•˜ë¼.
 SELECT mem_no, order_date,
 	ROW_NUMBER() OVER (PARTITION BY mem_no ORDER BY order_date ASC) AS rownumber,
 	RANK() OVER (PARTITION BY mem_no ORDER BY order_date ASC) AS rnk,
@@ -23,10 +23,10 @@ FROM [ORDER]
 
 
 
--- ´©Àû Áı°èÇÔ¼ö
+-- ëˆ„ì  ì§‘ê³„í•¨ìˆ˜
 
--- Q1. order_date¿¡ µû¶ó, sales_amtÀÇ ´©Àû ±¸¸ÅÈ½¼ö/´©Àû ±¸¸Å±İ¾×/´©Àû Æò±Õ±¸¸Å±İ¾×/´©Àû ÃÖ°í±¸¸Å±İ¾×/´©Àû ÃÖÀú±¸¸Å±İ¾×À» ±¸ÇÏ¿©¶ó.
--- °á°ú¸¦ º¸¸é °°Àº order_date¿¡ ´ëÇØ¼± ´©Àû°ªµéÀÌ ¸ğµÎ ¶È°°´Ù! 
+-- Q1. order_dateì— ë”°ë¼, sales_amtì˜ ëˆ„ì  êµ¬ë§¤íšŸìˆ˜/ëˆ„ì  êµ¬ë§¤ê¸ˆì•¡/ëˆ„ì  í‰ê· êµ¬ë§¤ê¸ˆì•¡/ëˆ„ì  ìµœê³ êµ¬ë§¤ê¸ˆì•¡/ëˆ„ì  ìµœì €êµ¬ë§¤ê¸ˆì•¡ì„ êµ¬í•˜ì—¬ë¼.
+-- ê²°ê³¼ë¥¼ ë³´ë©´ ê°™ì€ order_dateì— ëŒ€í•´ì„  ëˆ„ì ê°’ë“¤ì´ ëª¨ë‘ ë˜‘ê°™ë‹¤! 
 SELECT --order_date, sales_amt,
 		COUNT(sales_amt) OVER (ORDER BY order_date ASC),
 		SUM(sales_amt) OVER (ORDER BY order_date ASC)
@@ -34,29 +34,29 @@ FROM [ORDER]
 
 
 SELECT order_date, sales_amt,
-		COUNT(sales_amt) OVER (ORDER BY order_date ASC) AS ´©Àû±¸¸ÅÈ½¼ö,
-		SUM(sales_amt) OVER (ORDER BY order_date ASC) AS ´©Àû±¸¸Å±İ¾×,
-		AVG(sales_amt) OVER (ORDER BY order_date ASC) AS ´©ÀûÆò±Õ±¸¸Å±İ¾×,
-		MAX(sales_amt) OVER (ORDER BY order_date ASC) AS ´©ÀûÃÖ°í±¸¸Å±İ¾×,
-		MIN(sales_amt) OVER (ORDER BY order_date ASC) AS ´©ÀûÃÖÀú±¸¸Å±İ¾×
+		COUNT(sales_amt) OVER (ORDER BY order_date ASC) AS ëˆ„ì êµ¬ë§¤íšŸìˆ˜,
+		SUM(sales_amt) OVER (ORDER BY order_date ASC) AS ëˆ„ì êµ¬ë§¤ê¸ˆì•¡,
+		AVG(sales_amt) OVER (ORDER BY order_date ASC) AS ëˆ„ì í‰ê· êµ¬ë§¤ê¸ˆì•¡,
+		MAX(sales_amt) OVER (ORDER BY order_date ASC) AS ëˆ„ì ìµœê³ êµ¬ë§¤ê¸ˆì•¡,
+		MIN(sales_amt) OVER (ORDER BY order_date ASC) AS ëˆ„ì ìµœì €êµ¬ë§¤ê¸ˆì•¡
 FROM [ORDER] 
 
 
--- ¸¸ÀÏ ÀÌ·¸°Ô ÇÏ¸é? (±×·¡µµ °°Àº °á°ú´Ù. ¿Ö³Ä¸é order_dateº°·Î ´©Àû°ªÀ» ±¸ÇÏ´Â °Å´Ï±î!)
+-- ë§Œì¼ ì´ë ‡ê²Œ í•˜ë©´? -> order_date ê¸°ì¤€ìœ¼ë¡œ ê·¸ë£¹í™”ê°€ ëœë‹¤.
 SELECT order_date, sales_amt,
-		COUNT(sales_amt) OVER (PARTITION BY order_date ORDER BY order_date ASC) AS ´©Àû±¸¸ÅÈ½¼ö,
-		SUM(sales_amt) OVER (PARTITION BY order_date ORDER BY order_date ASC) AS ´©Àû±¸¸Å±İ¾×,
-		AVG(sales_amt) OVER (PARTITION BY order_date ORDER BY order_date ASC) AS ´©ÀûÆò±Õ±¸¸Å±İ¾×,
-		MAX(sales_amt) OVER (PARTITION BY order_date ORDER BY order_date ASC) AS ´©ÀûÃÖ°í±¸¸Å±İ¾×,
-		MIN(sales_amt) OVER (PARTITION BY order_date ORDER BY order_date ASC) AS ´©ÀûÃÖÀú±¸¸Å±İ¾×
+		COUNT(sales_amt) OVER (PARTITION BY order_date ORDER BY order_date ASC) AS ëˆ„ì êµ¬ë§¤íšŸìˆ˜,
+		SUM(sales_amt) OVER (PARTITION BY order_date ORDER BY order_date ASC) AS ëˆ„ì êµ¬ë§¤ê¸ˆì•¡,
+		AVG(sales_amt) OVER (PARTITION BY order_date ORDER BY order_date ASC) AS ëˆ„ì í‰ê· êµ¬ë§¤ê¸ˆì•¡,
+		MAX(sales_amt) OVER (PARTITION BY order_date ORDER BY order_date ASC) AS ëˆ„ì ìµœê³ êµ¬ë§¤ê¸ˆì•¡,
+		MIN(sales_amt) OVER (PARTITION BY order_date ORDER BY order_date ASC) AS ëˆ„ì ìµœì €êµ¬ë§¤ê¸ˆì•¡
 FROM [ORDER] 
 
 
--- Q2. mem_no ¹× order_dateº°(¿À¸§Â÷¼ø) ´©Àû Áı°èÇÔ¼ö¸¦ »ç¿ëÇÏ½Ã¿À.
+-- Q2. mem_no ë° order_dateë³„(ì˜¤ë¦„ì°¨ìˆœ) ëˆ„ì  ì§‘ê³„í•¨ìˆ˜ë¥¼ ì‚¬ìš©í•˜ì‹œì˜¤.
 SELECT mem_no, order_date, sales_amt,
-		COUNT(sales_amt) OVER (PARTITION BY mem_no ORDER BY order_date ASC) AS ´©Àû±¸¸ÅÈ½¼ö,
-		SUM(sales_amt) OVER (PARTITION BY mem_no ORDER BY order_date ASC) AS ´©Àû±¸¸Å±İ¾×,
-		AVG(sales_amt) OVER (PARTITION BY mem_no ORDER BY order_date ASC) AS ´©ÀûÆò±Õ±¸¸Å±İ¾×,
-		MAX(sales_amt) OVER (PARTITION BY mem_no ORDER BY order_date ASC) AS ´©ÀûÃÖ°í±¸¸Å±İ¾×,
-		MIN(sales_amt) OVER (PARTITION BY mem_no ORDER BY order_date ASC) AS ´©ÀûÃÖÀú±¸¸Å±İ¾×
+		COUNT(sales_amt) OVER (PARTITION BY mem_no ORDER BY order_date ASC) AS ëˆ„ì êµ¬ë§¤íšŸìˆ˜,
+		SUM(sales_amt) OVER (PARTITION BY mem_no ORDER BY order_date ASC) AS ëˆ„ì êµ¬ë§¤ê¸ˆì•¡,
+		AVG(sales_amt) OVER (PARTITION BY mem_no ORDER BY order_date ASC) AS ëˆ„ì í‰ê· êµ¬ë§¤ê¸ˆì•¡,
+		MAX(sales_amt) OVER (PARTITION BY mem_no ORDER BY order_date ASC) AS ëˆ„ì ìµœê³ êµ¬ë§¤ê¸ˆì•¡,
+		MIN(sales_amt) OVER (PARTITION BY mem_no ORDER BY order_date ASC) AS ëˆ„ì ìµœì €êµ¬ë§¤ê¸ˆì•¡
 FROM [ORDER] 
